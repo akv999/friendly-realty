@@ -1,0 +1,120 @@
+Creating a complete registration and login system with authentication and a CAPTCHA involves both front-end and back-end development. Below is a simple example using HTML for the front end, and PHP for a basic back-end authentication system. Please note that this is a simplified example and should not be used as-is for a production environment. You should implement additional security measures and consider using a secure authentication library.
+
+-----------
+Certainly! Here's a simplified example of a registration and login system using HTML for the front end, and Python with Flask and MongoDB for the back end. Before running this code, make sure you have Flask and pymongo installed:
+------------
+pip install Flask pymongo
+
+--------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Portal</title>
+</head>
+<body>
+
+    <h1>Real Estate Portal</h1>
+
+    <!-- Registration Form -->
+    <form action="/register" method="post">
+        <h2>Register</h2>
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+        <br>
+        <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY"></div>
+        <br>
+        <input type="submit" value="Register">
+    </form>
+
+    <hr>
+
+    <!-- Login Form -->
+    <form action="/login" method="post">
+        <h2>Login</h2>
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+        <br>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+        <br>
+        <div class="g-recaptcha" data-sitekey="YOUR_RECAPTCHA_SITE_KEY"></div>
+        <br>
+        <input type="submit" value="Login">
+    </form>
+
+    <!-- Include the reCAPTCHA script -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+</body>
+</html>
+-------------------------
+app.py
+
+from flask import Flask, render_template, request, redirect, url_for, session
+from flask_pymongo import PyMongo
+from werkzeug.security import generate_password_hash, check_password_hash
+import os
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['MONGO_URI'] = 'mongodb://localhost:27017/real_estate_portal'
+
+mongo = PyMongo(app)
+
+# Dummy user data for illustration purposes
+users = [
+    {'username': 'user1', 'password': generate_password_hash('password1')},
+    {'username': 'user2', 'password': generate_password_hash('password2')}
+]
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/register', methods=['POST'])
+def register():
+    username = request.form['username']
+    password = request.form['password']
+    
+    # Add server-side validation and database insertion code here
+
+    # Dummy registration logic for illustration purposes
+    # In a real application, you should check for duplicate usernames
+    # and securely store the hashed password in the database
+    for user in users:
+        if user['username'] == username:
+            return "Username already exists. Please choose another username."
+    
+    users.append({'username': username, 'password': generate_password_hash(password)})
+    return "Registration successful!"
+
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form['username']
+    password = request.form['password']
+    
+    # Add server-side validation and authentication code here
+
+    # Dummy login logic for illustration purposes
+    for user in users:
+        if user['username'] == username and check_password_hash(user['password'], password):
+            session['username'] = username
+            return "Login successful!"
+    
+    return "Invalid username or password."
+
+if __name__ == '__main__':
+    app.run(debug=True)
+------------------------
+In this example:
+
+The Flask framework is used to create a web application.
+The Flask-PyMongo extension is used for MongoDB integration.
+User data is stored in the users list for illustration purposes. In a real-world scenario, you should store user data securely in a database.
+Remember to replace "YOUR_RECAPTCHA_SITE_KEY" with the actual reCAPTCHA site key obtained from the reCAPTCHA website. Also, secure the application, implement user sessions, and use a proper database setup for a production environment.

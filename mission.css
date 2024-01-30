@@ -1,0 +1,29 @@
+*{
+    margin:0
+     padding:0;
+  }
+
+  .backgroundimage{
+    width: 1400px;
+    height: 700px;
+    background-image: url(barcalona.JPG);
+    opacity: .2;
+    position: absolute;
+}
+ul p
+{
+    margin-left: 70px;
+    font-size: xx-large;
+    color:blue;
+    font-weight: bold;
+}
+
+.gohome 
+{
+    font-size: xx-large;
+    list-style-type: none;
+    margin-left: 50px;
+    margin-top: 30px;
+}
+ 
+ 
